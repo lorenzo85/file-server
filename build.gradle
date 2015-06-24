@@ -1,0 +1,49 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.4.RELEASE")
+    }
+}
+
+apply plugin: 'groovy'
+apply plugin: 'spring-boot'
+apply plugin: 'idea'
+
+
+compileJava.doFirst {
+    println "source compatibility " + sourceCompatibility
+}
+
+idea {
+    module {
+        excludeDirs += file('.idea')
+        excludeDirs += file('gradle')
+    }
+}
+
+jar {
+    baseName = 'File server'
+    version = '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+
+    testCompile 'org.codehaus.groovy:groovy-all'
+    testCompile("org.spockframework:spock-spring:1.0-groovy-2.3")
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '1.2.4.RELEASE'
+    testCompile('junit:junit:4.12') {
+        exclude group: 'org.hamcrest', module: 'hamcrest-core'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
