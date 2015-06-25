@@ -8,15 +8,13 @@ import spock.lang.Specification
 
 class MediaTypeFileExtensionResolverTest extends Specification {
 
-    def mapper = new MediaTypeFileExtensionResolver()
-
     def "Should return correct media type for powerpoint"() {
         given:
         def fileName = "myPresentation.ppt"
         def givenMediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE
 
         when:
-        def value = mapper.resolveMediaType(givenMediaType, fileName)
+        def value = MediaTypeFileExtensionResolver.resolve(givenMediaType, fileName)
 
         then:
         value == ApplicationMediaTypes.MICROSOFT_POWERPOINT
@@ -28,7 +26,7 @@ class MediaTypeFileExtensionResolverTest extends Specification {
         def givenMediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE
 
         when:
-        def value = mapper.resolveMediaType(givenMediaType, fileName)
+        def value = MediaTypeFileExtensionResolver.resolve(givenMediaType, fileName)
 
         then:
         value == MediaType.APPLICATION_OCTET_STREAM
@@ -40,7 +38,7 @@ class MediaTypeFileExtensionResolverTest extends Specification {
         def givenMediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE
 
         when:
-        def value = mapper.resolveMediaType(givenMediaType, fileName)
+        def value = MediaTypeFileExtensionResolver.resolve(givenMediaType, fileName)
 
         then:
         value == MediaType.APPLICATION_OCTET_STREAM

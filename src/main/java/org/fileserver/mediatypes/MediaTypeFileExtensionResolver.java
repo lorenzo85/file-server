@@ -57,6 +57,11 @@ public class MediaTypeFileExtensionResolver extends MappingMediaTypeFileExtensio
         }
     }
 
+    public static MediaType resolve(String givenMediaType, String fileName) {
+        MediaTypeFileExtensionResolver resolver = new MediaTypeFileExtensionResolver();
+        return resolver.resolveMediaType(givenMediaType, fileName);
+    }
+
     private MediaType resolveMediaTypeByExtension(String givenMediaType, String extension) {
         MediaType assignedMediaType = lookupMediaType(extension);
         if (assignedMediaType == null) {

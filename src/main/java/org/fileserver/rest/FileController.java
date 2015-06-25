@@ -1,11 +1,9 @@
 package org.fileserver.rest;
 
-import org.apache.log4j.Logger;
 import org.fileserver.domain.Document;
 import org.fileserver.domain.DocumentMetadata;
-import org.fileserver.repository.FileRepository;
-import org.fileserver.repository.FileRepositoryImpl;
 import org.fileserver.mediatypes.MediaTypeFileExtensionResolver;
+import org.fileserver.repository.FileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -30,8 +28,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/")
 public class FileController {
 
-	private static final Logger LOGGER = Logger.getLogger(FileRepositoryImpl.class);
-
 	@Autowired
 	private FileRepository repository;
 
@@ -45,7 +41,8 @@ public class FileController {
 
 		String contentType = file.getContentType();
 		String fileName = file.getOriginalFilename();
-		MediaType mediaType = new MediaTypeFileExtensionResolver().resolveMediaType(contentType, fileName);
+		MediaType mediaType = MediaTypeFileExtensionResolver.resolve(contentType, fileName);
+
 		DocumentMetadata metadata = new DocumentMetadata(fileName, mediaType);
 		Document document = new Document(file.getBytes(), metadata);
 		return repository.save(document);
