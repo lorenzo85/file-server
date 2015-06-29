@@ -1,9 +1,8 @@
 package org.fileserver.rest;
 
-import org.fileserver.domain.Document;
-import org.fileserver.domain.DocumentMetadata;
+import org.fileserver.dto.DocumentDto;
 import org.fileserver.mediatypes.MediaTypeFileExtensionResolver;
-import org.fileserver.repository.FileRepository;
+import org.fileserver.service.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -29,55 +28,50 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class FileController {
 
 	@Autowired
-	private FileRepository repository;
+	private DocumentService service;
 
 	@RequestMapping(value = "upload", method = POST)
 	@ResponseBody
-	public Document handleFileUpload(@RequestParam(value = "file_data", required = true) MultipartFile file)
-			throws IOException {
+	public DocumentDto handleFileUpload(@RequestParam(value = "file_data", required = true) MultipartFile file) throws IOException {
 		if (file.isEmpty()) {
 			throw new IllegalArgumentException("The file is empty.");
 		}
-
-		String contentType = file.getContentType();
 		String fileName = file.getOriginalFilename();
-		MediaType mediaType = MediaTypeFileExtensionResolver.resolve(contentType, fileName);
-
-		DocumentMetadata metadata = new DocumentMetadata(fileName, mediaType);
-		Document document = new Document(file.getBytes(), metadata);
-		return repository.save(document);
+		MediaType mediaType = MediaTypeFileExtensionResolver.resolve(file.getContentType(), fileName);
+		DocumentDto dto = new DocumentDto(file.getBytes(), fileName, mediaType);
+		return service.save(dto);
 	}
 
 	@RequestMapping(value = "all", method = GET)
 	@ResponseBody
-	public List<Document> findAll() throws IOException {
-		return repository.listAll();
+	public List<DocumentDto> findAll() throws IOException {
+		return service.listAll();
 	}
 
-	@RequestMapping(value = "load/{uuid}", method = GET)
+	@RequestMapping(value = "load/{fileId}", method = GET)
 	@ResponseBody
-	public ResponseEntity<InputStreamResource> loadFile(@PathVariable("uuid") String uuid) throws IOException {
-		Document document = repository.load(uuid);
-		return buildResponseEntity(document);
+	public ResponseEntity<InputStreamResource> loadFile(@PathVariable("fileId") String fileId) throws IOException {
+		DocumentDto documentDto = service.load(fileId);
+		return buildResponseEntity(documentDto);
 	}
 
-	@RequestMapping(value = "delete/{uuid}", method = GET)
+	@RequestMapping(value = "delete/{fileId}", method = GET)
 	@ResponseBody
-	public void deleteFile(@PathVariable("uuid") String uuid) throws IOException {
-		repository.delete(uuid);
+	public void deleteFile(@PathVariable("fileId") String fileId) throws IOException {
+		service.delete(fileId);
 	}
 
-	private ResponseEntity<InputStreamResource> buildResponseEntity(Document document) {
+	private ResponseEntity<InputStreamResource> buildResponseEntity(DocumentDto dto) {
 		return ResponseEntity
 				.ok()
-				.headers(buildHeaders(document))
-				.body(new InputStreamResource(document.asInputStream()));
+				.headers(buildHeaders(dto))
+				.body(new InputStreamResource(dto.asInputStream()));
 	}
 
-	private HttpHeaders buildHeaders(Document document) {
-		String contentDisposition = format("attachment;filename=\"%s\"", document.getMetadata().getFileName());
-		String mediaType = document.getMetadata().getMediaType().toString();
-		String length = Long.toString(document.length());
+	private HttpHeaders buildHeaders(DocumentDto dto) {
+		String contentDisposition = format("attachment;filename=\"%s\"", dto.getFileName());
+		String mediaType = dto.getMediaType().toString();
+		String length = Long.toString(dto.length());
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(CONTENT_DISPOSITION, contentDisposition);
 		headers.add(CONTENT_TYPE, mediaType);

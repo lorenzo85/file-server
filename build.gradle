@@ -11,9 +11,8 @@ apply plugin: 'groovy'
 apply plugin: 'spring-boot'
 apply plugin: 'idea'
 
-
 compileJava.doFirst {
-    println "source compatibility " + sourceCompatibility
+    println ":compileJava [Project Java source compatibility=" + sourceCompatibility + "]"
 }
 
 idea {
@@ -33,12 +32,15 @@ repositories {
 }
 
 dependencies {
-    compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     compile group: 'com.google.guava', name: 'guava', version: '18.0'
+    compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.32'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '1.2.4.RELEASE'
 
-    testCompile 'org.codehaus.groovy:groovy-all'
-    testCompile("org.spockframework:spock-spring:1.0-groovy-2.3")
+    testCompile group: 'org.codehaus.groovy', name: 'groovy-all'
+    testCompile group: 'cglib', name: 'cglib-nodep', version: '2.2'
+    testCompile group: 'org.spockframework', name: 'spock-spring', version: '1.0-groovy-2.3'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '1.2.4.RELEASE'
     testCompile('junit:junit:4.12') {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'

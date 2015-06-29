@@ -1,10 +1,7 @@
-package org.fileserver
+package org.fileserver.mediatypes
 
-import org.fileserver.mediatypes.ApplicationMediaTypes
-import org.fileserver.mediatypes.MediaTypeFileExtensionResolver
 import org.springframework.http.MediaType
 import spock.lang.Specification
-
 
 class MediaTypeFileExtensionResolverTest extends Specification {
 

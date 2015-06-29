@@ -21,8 +21,8 @@ var ListItems = React.createClass({
         var rows = [];
         for (var key in files) {
             if (files.hasOwnProperty(key)) {
-                var text = files[key].metadata.fileName;
-                var identifier = files[key].identifier;
+                var text = files[key].fileName;
+                var identifier = files[key].id;
                 rows.push(<ListItem text={text} identifier={identifier} deleteCallback={deleteCallback} />)
             }
         }
