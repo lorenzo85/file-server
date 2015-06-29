@@ -1,5 +1,6 @@
 package org.testutils
 import org.fileserver.repository.FileSystemRepository
+import org.fileserver.service.AsyncDocumentDeleteService
 import org.mockito.Mockito
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -14,5 +15,11 @@ class TestConfig {
     @Primary
     def FileSystemRepository getFileSystemRepository() {
         return Mockito.mock(FileSystemRepository.class)
+    }
+
+    @Bean
+    @Primary
+    def AsyncDocumentDeleteService getSomething() {
+        return Mockito.mock(AsyncDocumentDeleteService.class)
     }
 }

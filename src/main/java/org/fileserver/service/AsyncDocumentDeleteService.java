@@ -31,7 +31,7 @@ public class AsyncDocumentDeleteService {
         tryToDelete(fileToBeDeleted);
     }
 
-    @Scheduled(cron = "0 0 12 1/1 * ?")
+    @Scheduled(cron = "0 0 12 * * ?")
     public void deleteAllMarkedAsDeleted() {
         tryToDelete(fileDatabaseRepository.findAllDeleted());
     }
