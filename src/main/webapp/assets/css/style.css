@@ -18,3 +18,7 @@ html, body, .full-height {
     margin-bottom: 0;
     overflow: auto;
 }
+#error {
+    color: red;
+    padding-top: 20px;
+}
