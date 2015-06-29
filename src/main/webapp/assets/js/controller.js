@@ -10,6 +10,10 @@ function initialize() {
         showPreview: false
     }).on('filebatchuploadsuccess', function () {
         refreshFilesList();
+    }).on('filebatchuploaderror', function () {
+        $('#error').text("Could not upload file, retry later.");
+    }).on('filepreupload', function () {
+        $('#error').text('');
     });
     refreshFilesList();
 }
