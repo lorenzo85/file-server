@@ -10,6 +10,16 @@ buildscript {
 apply plugin: 'groovy'
 apply plugin: 'spring-boot'
 apply plugin: 'idea'
+apply plugin: 'war'
+
+war {
+    baseName = 'fileserver'
+    version = '0.0.1'
+}
+
+configurations {
+    providedRuntime
+}
 
 compileJava.doFirst {
     println ":compileJava [Project Java source compatibility=" + sourceCompatibility + "]"
@@ -32,6 +42,7 @@ repositories {
 }
 
 dependencies {
+    providedRuntime group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat'
     compile group: 'com.google.guava', name: 'guava', version: '18.0'
     compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.32'
